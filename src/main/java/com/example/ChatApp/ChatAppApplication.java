@@ -15,23 +15,19 @@ public class ChatAppApplication {
 	public static void main(String[] args) throws InterruptedException, IOException {
 		SpringApplication.run(ChatAppApplication.class, args);
 
-		new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+
 		//CustomerServiceClient client = new CustomerServiceClient("ws://localhost:8080/chat", "/app/hello", "Hello my name is Joseph Song");
 
 
-
-
-
-		/*try {
+		try {
 			if (System.getProperty("os.name").contains("Windows")) {
 
-
-
-
-
+				new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
 
 			} else {
+
 				Runtime.getRuntime().exec("clear");
+
 			}
 
 
@@ -40,7 +36,7 @@ public class ChatAppApplication {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-		*/
+
 
 
 
