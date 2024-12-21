@@ -1,0 +1,27 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    height: 100vh;
+    overflow: hidden;
+
+}
+
+img {
+    width: 250px;
+    height: 250px;
+    position: absolute;
+    top: 500px;
+    left: 380px;
+}
+
+.chat-container {
+    width: 400px;
+    height: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #F5F5F5;
+}
