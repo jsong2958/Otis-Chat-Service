@@ -20,8 +20,24 @@ img {
     height: 500px;
     border-radius: 8px;
     box-shadow: 0 4px 8px;
+
+    position: relative;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     background-color: #F5F5F5;
+}
+
+.footer {
+    margin-top: auto;
+    margin-bottom: 2px;
+    display: flex;
+    justify-content: right;
+}
+
+
+#message {
+    width: 340px;
+    border-radius: 100px;
+
 }
