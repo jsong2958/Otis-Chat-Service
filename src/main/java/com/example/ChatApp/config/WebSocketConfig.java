@@ -1,4 +1,4 @@
-package com.example.ChatApp;
+package com.example.ChatApp.config;
 
 
 

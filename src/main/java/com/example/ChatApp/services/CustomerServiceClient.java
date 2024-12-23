@@ -1,4 +1,4 @@
-package com.example.ChatApp;
+package com.example.ChatApp.services;
 
 import lombok.Getter;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;

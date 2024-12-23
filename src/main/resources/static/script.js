@@ -4,9 +4,10 @@ const stompClient = new StompJs.Client({
 
 stompClient.onConnect = (frame) => {
     console.log('Connected: ', frame);
-    stompClient.subscribe("/topic/greetings", (greeting) => {
-        const message = (greeting.body)
-        showGreeting(message);
+    stompClient.subscribe("/topic/messages", (messageDTO) => {
+        const message = JSON.parse(messageDTO.body)
+        console.log(message);
+        addMessage(message.user, message.messageContent);
     });
 };
 
@@ -19,19 +20,47 @@ stompClient.onStompError = (frame) => {
     console.error('Additional details: ' + frame.body);
 };
 
-function sendName() { //sends name to /app/hello, called by the function in GreetingController
+function sendMessage() { //sends name to /app/hello, called by the function in GreetingController
+
+    const user = $("#user").val();
+    const messageContent = $('#message').val()
+
+    const messageModel = {
+        user: user,
+        messageContent: messageContent
+    };
+
     stompClient.publish({
         destination: "/app/hello",
-        body: JSON.stringify({'content': $('#message').val()})
+        body: JSON.stringify(messageModel)
     });
 }
 
-function showGreeting(message) {
-    $("#messages").append(message);
+function addMessage(user, messageContent) {
+    let alignmentClass;
+
+    if (user !== "Otis") {
+        alignmentClass = "send";
+    } else {
+        alignmentClass = "receive";
+    }
+
+    const messageElement = `
+        <div class="chat-message ${alignmentClass}">
+            <span class="user-name">${user}</span>
+            <p class="message-content">${messageContent}</p>
+        </div>
+    `;
+
+    $("#messages").append(messageElement);
+
+    const chatBody = document.getElementById("messages");
+    chatBody.scrollTop = chatBody.scrollHeight;
+
 }
 
 $(function () {
-   $("#send").click(() => sendName());
+   $("#send").click(() => sendMessage());
 });
 
 stompClient.activate();

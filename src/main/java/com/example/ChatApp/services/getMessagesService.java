@@ -1,15 +1,16 @@
 package com.example.ChatApp.services;
 
 
-import com.example.ChatApp.MessageRepository;
+import com.example.ChatApp.model.MessageDTO;
+import com.example.ChatApp.repository.MessageRepository;
 import com.example.ChatApp.Query;
-import com.example.ChatApp.messageModel;
+import com.example.ChatApp.model.Message;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class getMessagesService implements Query<Void, List<messageModel>> {
+public class getMessagesService implements Query<Void, List<Message>> {
 
     private final MessageRepository messageRepository;
 
@@ -18,7 +19,7 @@ public class getMessagesService implements Query<Void, List<messageModel>> {
     }
 
     @Override
-    public List<messageModel> execute(Void input) {
+    public List<Message> execute(Void input) {
         return messageRepository.findAll();
     }
 }

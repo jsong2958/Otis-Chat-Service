@@ -1,9 +1,8 @@
 package com.example.ChatApp.services;
 
 import com.example.ChatApp.Command;
-import com.example.ChatApp.Message;
-import com.example.ChatApp.MessageRepository;
-import com.example.ChatApp.messageModel;
+import com.example.ChatApp.repository.MessageRepository;
+import com.example.ChatApp.model.Message;
 import org.springframework.stereotype.Service;
 
 
@@ -18,8 +17,7 @@ public class postMessageService implements Command<Message, Void> {
 
     @Override
     public Void execute(Message msg) {
-        messageModel message =  new messageModel(msg.getContent());
-        messageRepository.save(message);
+        messageRepository.save(msg);
         return null;
     }
 }

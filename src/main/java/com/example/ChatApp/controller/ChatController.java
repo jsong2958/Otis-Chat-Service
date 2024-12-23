@@ -1,6 +1,8 @@
-package com.example.ChatApp;
+package com.example.ChatApp.controller;
 
 
+import com.example.ChatApp.model.Message;
+import com.example.ChatApp.model.MessageDTO;
 import com.example.ChatApp.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,28 +19,28 @@ import org.springframework.web.util.HtmlUtils;
 import java.util.List;
 
 @RestController
-public class GreetingController {
+public class ChatController {
 
-    private static final Logger logger = LoggerFactory.getLogger(GreetingController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
 
     private final postMessageService postMessageService;
     private final getMessagesService getMessagesService;
 
-    public GreetingController(postMessageService postMessageService, getMessagesService getMessagesService) {
+    public ChatController(postMessageService postMessageService, getMessagesService getMessagesService) {
         this.postMessageService = postMessageService;
         this.getMessagesService = getMessagesService;
     }
 
     @MessageMapping("/hello") //when message sent to /hello, the method is called. Because of config, it will be /app/hello
-    @SendTo("/topic/greetings") //return Greeting is sent to /topic/greetings, which will be re-rendered in browser
+    @SendTo("/topic/messages") //return Greeting is sent to /topic/greetings, which will be re-rendered in browser
     @PostMapping("/messages")
-    public String onMessage(@RequestBody Message message) {
+    public MessageDTO onMessage(@RequestBody Message message) {
         postMessageService.execute(message);
-        return HtmlUtils.htmlEscape(message.getContent());
+        return new MessageDTO(message);
     }
 
     @GetMapping("/messages")
-    public List<messageModel> getMessages() {
+    public List<Message> getMessages() {
         return getMessagesService.execute(null);
     }
 

@@ -1,5 +1,6 @@
-package com.example.ChatApp;
+package com.example.ChatApp.services;
 
+import com.example.ChatApp.model.Message;
 import lombok.Getter;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -30,8 +31,8 @@ public class StompSessionHandlerImpl extends StompSessionHandlerAdapter {
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                Message  msg = (Message) payload;
-                System.out.println("Recieved :" + msg.getContent());
+                Message msg = (Message) payload;
+                System.out.println("Recieved :" + msg.getMessageContent());
             }
         };
 
@@ -42,7 +43,8 @@ public class StompSessionHandlerImpl extends StompSessionHandlerAdapter {
         latch.await();
     }
     public void sendMessage(StompSession session, Message message) {
-        session.send("/app/hello", message.getContent());
+        message.setUser("Otis");
+        session.send("/app/hello", message.getMessageContent());
     }
 
 
