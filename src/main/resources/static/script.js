@@ -25,14 +25,14 @@ function sendMessage() { //sends name to /app/hello, called by the function in G
     const user = $("#user").val();
     const messageContent = $('#message').val()
 
-    const messageModel = {
+    const message = {
         user: user,
         messageContent: messageContent
     };
 
     stompClient.publish({
         destination: "/app/hello",
-        body: JSON.stringify(messageModel)
+        body: JSON.stringify(message)
     });
 }
 
@@ -40,14 +40,13 @@ function addMessage(user, messageContent) {
     let alignmentClass;
 
     if (user !== "Otis") {
-        alignmentClass = "send";
+        alignmentClass = "right";
     } else {
-        alignmentClass = "receive";
+        alignmentClass = "left";
     }
 
     const messageElement = `
         <div class="chat-message ${alignmentClass}">
-            <span class="user-name">${user}</span>
             <p class="message-content">${messageContent}</p>
         </div>
     `;

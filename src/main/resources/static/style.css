@@ -69,5 +69,36 @@ img {
 }
 
 #send:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #0056b3;
+}
+
+
+
+.chat-message {
+    margin: 5px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    max-width: 70%;
+}
+
+.chat-body {
+    height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-body::after {
+    content: none;
+}
+
+.left {
+    align-self: flex-start;
+    background-color: #a69e9e;
+}
+
+.right {
+    align-self: flex-end;
+    background-color: #37acd5;
 }

@@ -1,23 +1,24 @@
 package com.example.ChatApp.services;
 
 import com.example.ChatApp.Command;
+import com.example.ChatApp.model.MessageDTO;
 import com.example.ChatApp.repository.MessageRepository;
 import com.example.ChatApp.model.Message;
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class postMessageService implements Command<Message, Void> {
+public class PostMessageService implements Command<Message, MessageDTO> {
 
     private final MessageRepository messageRepository;
 
-    public postMessageService(MessageRepository messageRepository) {
+    public PostMessageService(MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
     }
 
     @Override
-    public Void execute(Message msg) {
+    public MessageDTO execute(Message msg) {
         messageRepository.save(msg);
-        return null;
+        return new MessageDTO(msg);
     }
 }

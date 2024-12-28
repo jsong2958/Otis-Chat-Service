@@ -1,5 +1,8 @@
 package com.example.ChatApp;
 
+import com.example.ChatApp.gemini.model.JsonUtil;
+import com.example.ChatApp.model.Message;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -24,6 +27,8 @@ public class ChatAppApplication {
 			if (System.getProperty("os.name").contains("Windows")) {
 
 				new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+
+
 
 			} else {
 
