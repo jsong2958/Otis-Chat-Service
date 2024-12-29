@@ -1,7 +1,6 @@
 package com.example.ChatApp.controller;
 
 
-import com.example.ChatApp.gemini.model.AiResponse;
 import com.example.ChatApp.gemini.services.AiResponseService;
 import com.example.ChatApp.model.Message;
 import com.example.ChatApp.model.MessageDTO;
@@ -16,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ChatController {
@@ -27,19 +28,30 @@ public class ChatController {
     private final GetMessagesService getMessagesService;
     private final AiResponseService aiResponseService;
 
+    private boolean isUsingAi = true;
+
+
     public ChatController(PostMessageService postMessageService,
                           GetMessagesService getMessagesService,
                           AiResponseService aiResponseService) {
         this.postMessageService = postMessageService;
         this.getMessagesService = getMessagesService;
         this.aiResponseService = aiResponseService;
+
     }
 
     @MessageMapping("/hello") //when message sent to /hello, the method is called. Because of config, it will be /app/hello
     @SendTo("/topic/messages") //new MessageDTO is sent to /topic/greetings, which will be re-rendered in browser
     @PostMapping("/messages") //posts to database
-    public MessageDTO onMessage(@RequestBody Message message) {
-        return postMessageService.execute(message);
+    public MessageDTO onMessage(@RequestBody Message message) throws JsonProcessingException {
+
+        
+        if (isUsingAi) {
+            postMessageService.execute(message);
+            return aiResponseService.execute(message);
+        }
+
+
     }
 
     @GetMapping("/messages")
@@ -47,10 +59,10 @@ public class ChatController {
         return getMessagesService.execute(null);
     }
 
-    @PostMapping("/response")
-    public AiResponse getAiResponse(@RequestBody Message message) throws JsonProcessingException {
-        logger.info("New post request");
-        return aiResponseService.execute(message);
+    @MessageMapping("/switch")
+    public void switchOffAi() {
+        isUsingAi = false;
+        logger.info("Switch off Ai");
     }
 
     @EventListener

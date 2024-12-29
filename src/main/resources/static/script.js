@@ -2,12 +2,16 @@ const stompClient = new StompJs.Client({
     brokerURL: 'ws://localhost:8080/chat'
 });
 
+var user = "Joey";
+var currentUser = user;
+var isAi = true;
+
 stompClient.onConnect = (frame) => {
     console.log('Connected: ', frame);
     stompClient.subscribe("/topic/messages", (messageDTO) => {
         const message = JSON.parse(messageDTO.body)
         console.log(message);
-        addMessage(message.user, message.messageContent);
+        addMessage(message.messageContent);
     });
 };
 
@@ -36,13 +40,13 @@ function sendMessage() { //sends name to /app/hello, called by the function in G
     });
 }
 
-function addMessage(user, messageContent) {
+function addMessage(messageContent) {
     let alignmentClass;
 
-    if (user !== "Otis") {
-        alignmentClass = "right";
-    } else {
+    if (currentUser === "Otis" || isAi) {
         alignmentClass = "left";
+    } else {
+        alignmentClass = "right";
     }
 
     const messageElement = `
@@ -58,8 +62,40 @@ function addMessage(user, messageContent) {
 
 }
 
+function switchUser() {
+    if (currentUser === "Otis") {
+        currentUser = user;
+    } else {
+        currentUser = "Otis"
+    }
+
+    console.log(currentUser);
+}
+
+function switchOffAi() {
+    stompClient.publish({
+        destination: "/app/switch",
+        body: "_"
+    });
+    isAi = false;
+    console.log("switched!");
+}
+
 $(function () {
    $("#send").click(() => sendMessage());
+   $("#switch").click(() => switchUser());
+   $("#switchOffAi").click(() => switchOffAi());
+
+   let input = document.getElementById("message");
+   input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+          event.preventDefault();
+          sendMessage();
+      }
+   });
+
+
+
 });
 
 stompClient.activate();

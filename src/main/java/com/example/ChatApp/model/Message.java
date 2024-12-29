@@ -21,8 +21,12 @@ public class Message {
     @Column(name = "message_content")
     private String messageContent;
 
+
+
     public Message(String msg) {
         this.messageContent = msg;
     }
+
+
 
 }
