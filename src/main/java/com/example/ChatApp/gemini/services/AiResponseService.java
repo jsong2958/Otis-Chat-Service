@@ -1,6 +1,7 @@
 package com.example.ChatApp.gemini.services;
 
 import com.example.ChatApp.Command;
+import com.example.ChatApp.controller.ChatController;
 import com.example.ChatApp.gemini.model.JsonUtil;
 import com.example.ChatApp.model.Message;
 
@@ -8,6 +9,8 @@ import com.example.ChatApp.model.MessageDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +22,7 @@ public class AiResponseService implements Command<Message, MessageDTO> {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
-
+    private static final Logger logger = LoggerFactory.getLogger(AiResponseService.class);
 
 
 
@@ -43,7 +46,7 @@ public class AiResponseService implements Command<Message, MessageDTO> {
         JsonNode rootNode = objectMapper.readTree(response.getBody());
 
         Message message = new Message(rootNode.get("candidates").get(0).get("content").get("parts").get(0).get("text").asText());
-
+        logger.info(message.getMessageContent());
         return new MessageDTO(message);
     }
 }

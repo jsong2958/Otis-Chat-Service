@@ -13,6 +13,12 @@ stompClient.onConnect = (frame) => {
         console.log(message);
         addMessage(message.messageContent);
     });
+
+    stompClient.subscribe("/topic/ai-messages", (messageDTO) => {
+        const message = JSON.parse(messageDTO.body)
+        console.log(message);
+        addAiMessage(message.messageContent);
+    });
 };
 
 stompClient.onWebSocketError = (error) => {
@@ -24,7 +30,7 @@ stompClient.onStompError = (frame) => {
     console.error('Additional details: ' + frame.body);
 };
 
-function sendMessage() { //sends name to /app/hello, called by the function in GreetingController
+function sendMessage() { //sends name to /app/message, called by the function in ChatController
 
     const user = $("#user").val();
     const messageContent = $('#message').val()
@@ -34,20 +40,42 @@ function sendMessage() { //sends name to /app/hello, called by the function in G
         messageContent: messageContent
     };
 
-    stompClient.publish({
-        destination: "/app/hello",
-        body: JSON.stringify(message)
-    });
+    if (isAi) {
+        stompClient.publish({
+            destination: "/app/message",
+            body: JSON.stringify(message)
+        });
+        stompClient.publish({
+            destination: "/app/ai-message",
+            body: JSON.stringify(message)
+        });
+    } else {
+        stompClient.publish({
+            destination: "/app/message",
+            body: JSON.stringify(message)
+        });
+    }
 }
 
 function addMessage(messageContent) {
-    let alignmentClass;
 
-    if (currentUser === "Otis" || isAi) {
-        alignmentClass = "left";
-    } else {
-        alignmentClass = "right";
-    }
+    const alignmentClass = currentUser === "Otis" ? "left" : "right";
+
+    const messageElement = `
+        <div class="chat-message ${alignmentClass}">
+            <p class="message-content">${messageContent}</p>
+        </div>
+    `;
+
+    $("#messages").append(messageElement);
+
+    const chatBody = document.getElementById("messages");
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+}
+
+function addAiMessage(messageContent) {
+    const alignmentClass = "left";
 
     const messageElement = `
         <div class="chat-message ${alignmentClass}">
@@ -72,19 +100,14 @@ function switchUser() {
     console.log(currentUser);
 }
 
-function switchOffAi() {
-    stompClient.publish({
-        destination: "/app/switch",
-        body: "_"
-    });
-    isAi = false;
-    console.log("switched!");
+function switchAi() {
+    isAi = !isAi;
 }
 
 $(function () {
    $("#send").click(() => sendMessage());
    $("#switch").click(() => switchUser());
-   $("#switchOffAi").click(() => switchOffAi());
+   $("#switchOffAi").click(() => switchAi());
 
    let input = document.getElementById("message");
    input.addEventListener("keydown", function(event) {
