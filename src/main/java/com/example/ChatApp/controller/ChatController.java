@@ -9,14 +9,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 
-
-import java.util.List;
+import java.io.IOException;
 
 
 @RestController
@@ -25,16 +23,13 @@ public class ChatController {
     private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
 
     private final PostMessageService postMessageService;
-    private final GetMessagesService getMessagesService;
     private final AiResponseService aiResponseService;
 
 
 
     public ChatController(PostMessageService postMessageService,
-                          GetMessagesService getMessagesService,
                           AiResponseService aiResponseService) {
         this.postMessageService = postMessageService;
-        this.getMessagesService = getMessagesService;
         this.aiResponseService = aiResponseService;
 
     }
@@ -53,13 +48,20 @@ public class ChatController {
     }
 
 
-
-    @GetMapping("/messages")
-    public List<Message> getMessages() {
-        return getMessagesService.execute(null);
+    @MessageMapping("/switch")
+    public void switchOff(@RequestBody String message) {
+        openNewCommandPrompt();
     }
 
-
+    private void openNewCommandPrompt() {
+        try {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {

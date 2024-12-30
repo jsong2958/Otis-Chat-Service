@@ -11,7 +11,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class AiResponseService implements Command<Message, MessageDTO> {
+
+    @Value("${api.key}")
+    private String API_KEY;
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
@@ -34,13 +38,18 @@ public class AiResponseService implements Command<Message, MessageDTO> {
 
     }
 
+    public Message createPrompt(Message message) {
+        message.setMessageContent("You are an assistant that provides helpful information on a given query" +
+                "Please generate a detailed response based on this message: " + message.getMessageContent());
+        return message;
+    }
 
     @Override
     public MessageDTO execute(Message msg) throws JsonProcessingException {
-        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBn76qs9e_EwynYVMUvn2VzD7bDZq3P0Fc";
+        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY;
         JsonUtil json = new JsonUtil(this.objectMapper);
 
-        HttpEntity<String> entity = new HttpEntity<>(json.createJson(msg));
+        HttpEntity<String> entity = new HttpEntity<>(json.createJson(createPrompt(msg)));
 
         ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
         JsonNode rootNode = objectMapper.readTree(response.getBody());

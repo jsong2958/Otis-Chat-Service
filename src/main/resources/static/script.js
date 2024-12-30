@@ -40,21 +40,25 @@ function sendMessage() { //sends name to /app/message, called by the function in
         messageContent: messageContent
     };
 
-    if (isAi) {
-        stompClient.publish({
-            destination: "/app/message",
-            body: JSON.stringify(message)
-        });
-        stompClient.publish({
-            destination: "/app/ai-message",
-            body: JSON.stringify(message)
-        });
-    } else {
-        stompClient.publish({
-            destination: "/app/message",
-            body: JSON.stringify(message)
-        });
+    if ($('#message').val() !== "") {
+        if (isAi) {
+            stompClient.publish({
+                destination: "/app/message",
+                body: JSON.stringify(message)
+            });
+            stompClient.publish({
+                destination: "/app/ai-message",
+                body: JSON.stringify(message)
+            });
+        } else {
+            stompClient.publish({
+                destination: "/app/message",
+                body: JSON.stringify(message)
+            });
+        }
     }
+
+    $("#message").val("");
 }
 
 function addMessage(messageContent) {
@@ -100,14 +104,18 @@ function switchUser() {
     console.log(currentUser);
 }
 
-function switchAi() {
-    isAi = !isAi;
+function switchOffAi() {
+    stompClient.publish({
+        destination: "/switch",
+        body: "Switch off"
+    });
+    isAi = false;
 }
 
 $(function () {
    $("#send").click(() => sendMessage());
    $("#switch").click(() => switchUser());
-   $("#switchOffAi").click(() => switchAi());
+   $("#switchOffAi").click(() => switchOffAi());
 
    let input = document.getElementById("message");
    input.addEventListener("keydown", function(event) {

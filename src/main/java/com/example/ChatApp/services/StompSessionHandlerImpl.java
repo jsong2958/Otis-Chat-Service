@@ -11,9 +11,9 @@ import java.util.concurrent.CountDownLatch;
 @Getter
 public class StompSessionHandlerImpl extends StompSessionHandlerAdapter {
 
-    private StompSessionHandlerAdapter handler;
+    private final StompSessionHandlerAdapter handler;
     private StompSession stompSession;
-    private CountDownLatch latch;
+    private final CountDownLatch latch;
 
     public StompSessionHandlerImpl() {
         this.latch = new CountDownLatch(1);
@@ -22,8 +22,7 @@ public class StompSessionHandlerImpl extends StompSessionHandlerAdapter {
             @Override
             public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
                 stompSession = session;
-                System.out.println("Connected! XD");
-                session.subscribe("/topic/greetings", this);
+                session.subscribe("/topic/messages", this);
                 latch.countDown();
             }
 
@@ -32,7 +31,7 @@ public class StompSessionHandlerImpl extends StompSessionHandlerAdapter {
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
                 Message msg = (Message) payload;
-                System.out.println("Recieved :" + msg.getMessageContent());
+                System.out.println("Received :" + msg.getMessageContent());
             }
         };
 
