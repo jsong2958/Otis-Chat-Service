@@ -102,3 +102,12 @@ img {
     align-self: flex-end;
     background-color: #37acd5;
 }
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+
+
