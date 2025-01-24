@@ -5,7 +5,7 @@ A real-time customer service chat application built with **Spring**, utilizing *
 
 Otis is a character from my favorite mobile game, Brawl Stars. He was chosen as the project mascot because he conveniently looks right up at the chat UI.
 
-![Otis](src/main/resources/static/otis.png)
+![Otis](src/main/resources/static/ChatApp.png)
 
 
 
