@@ -20,7 +20,7 @@ public class ChatAppApplication {
 		SpringApplication.run(ChatAppApplication.class, args);
 
 
-		//CustomerServiceClient client = new CustomerServiceClient("ws://localhost:8080/chat", "/app/hello", "Hello my name is Joseph Song");
+		CustomerServiceClient client = new CustomerServiceClient("ws://localhost:8080/chat", "/app/hello", "Hello my name is Joseph Song");
 
 
 
