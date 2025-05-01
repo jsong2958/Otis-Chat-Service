@@ -17,24 +17,21 @@ img {
 
 .header {
     padding: 10px 20px;
-    background-color: #007bff; /* Blue background for the header */
-    color: white;
-    font-size: 1.2em;
+    background-color: #020202;
+    color: rgb(61, 77, 129);
     text-align: center;
-    font-weight: bold;
 }
 
 .chat-container {
     width: 400px;
     height: 500px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px;
+    
 
     position: relative;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    background-color: #F5F5F5;
+    background-color: #706c6c;
 }
 
 .footer {
@@ -53,15 +50,14 @@ img {
     border: 1px solid #ccc;
     font-size: 1em;
     outline: none;
-    background-color: #ffffff;
+    background-color: #f5f5f5;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 #send {
     padding: 10px 20px;
-    border-radius: 20px;
     border: none;
-    background-color: #007bff;
+    background-color: #110202;
     color: white;
     font-size: 1em;
     cursor: pointer;
